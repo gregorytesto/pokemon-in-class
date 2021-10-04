@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fetch</title>
+    <script defer src="script.js"></script>
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+    <div id="main">
+        <div id="header">
+            <h1>Poké Teams</h1>
+        </div>
+        <form id="pokemon-selector">
+            <div id="error-message"></div>
+            <select id="pokemon-select" name="pokemon-select">
+                <option value="default">--Choose your Pokemon--</option>
+                <option value="pikachu">Pikachu</option>
+                <option value="squirtle">Squirtle</option>
+                <option value="charmander">Charmander</option>
+            </select>
+            <input type="submit" value="Go" />
+        </form>
+        <div id="details">
+            <div id="details-title">
+                <h2>Details</h2>
+            </div>
+            <div id="details-img-container">
+                <img src="https://cdn.ndtv.com/tech/images/gadgets/pikachu_hi_pokemon.jpg" alt="Image of selected pokémon" />
+            </div>
+            <div id="details-text">
+                <div id="details-name">Name: Pikachu</div>
+                <div id="details-species">Species: Pikachu</div>
+                <div id="details-type">Type: Electric</div>
+            </div>
+            <div id="details-sub-text">
+                <h3>Base Attributes</h3>
+                <div>Hit Points: 35</div>
+                <div>Attack: 55</div>
+                <div>Defense: 40</div>
+            </div>
+            <div id="details-action">
+                <button>Add -></button>
+            </div>
+        </div>
+        <div id="team">Team</div>
+        <div id="evolution">Evolution</div>
+        <div id="recent">Recent</div>
+    </div>
+    <div id="current-pokemon"></div>
+</body>
+</html>

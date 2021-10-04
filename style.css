@@ -1,0 +1,80 @@
+#error-message{
+    color:red;
+    font-weight: 600;
+}
+
+#main{
+    display: grid;
+    grid-template-areas: 
+    "header header header"
+    "selector selector selector"
+    "details details team"
+    "evolution evolution evolution"
+    "recent recent recent";
+    grid-gap: 5px;
+    max-width: 800px;
+    width: 75%;
+    margin: 0 auto;
+}
+
+#main > *{
+    border: 1px solid black;
+    padding: 10px 20px;
+}
+
+#header{
+    grid-area: header;
+}
+
+#pokemon-selector{
+    grid-area: selector;
+}
+
+#details > *{
+    border: 1px solid black;
+    padding: 5px 10px;
+}
+
+#details{
+    grid-area: details;
+    display: grid;
+    grid-template-areas: 
+    "details-title details-title"
+    "details-img details-text"
+    "details-sub-text details-sub-text"
+    ". details-action";
+    grid-gap: 5px;
+}
+
+#details-title{
+    grid-area: details-title;
+}
+
+#details-img-container img{
+    grid-area: details-img;
+    width:100px;
+}
+
+#details-text{
+    grid-area: details-text;
+}
+
+#details-sub-text{
+    grid-area: details-sub-text;
+}
+
+#details-action{
+    grid-area: details-action;
+}
+
+#team{
+    grid-area: team;
+}
+
+#evolution{
+    grid-area: evolution;
+}
+
+#recent{
+    grid-area: recent;
+}
