@@ -1,41 +1,52 @@
-// fetch("https://pokeapi.co/api/v2/pokemon?limit=30")
-//     .then((res)=>{
-//         return res.json();
-//     }).then((data)=>{
-//         let pokemonList = data.results;
+fetch("https://pokeapi.co/api/v2/pokemon?limit=30")
+    .then((res)=>{
+        return res.json();
+    }).then((data)=>{
+        let pokemonList = data.results;
+        for(let pokemon of pokemonList){
+            let { name } = pokemon;
+            let select = document.querySelector("#pokemon-selector select");
+            
+            /////////////////// Option
+            let newOption = document.createElement("option");
+            newOption.textContent = name[0].toUpperCase() + name.slice(1);
+            newOption.value = name;
+            /////////////////// Option
 
-//         // console.log(pokemonList);
-//         // .sort((a,b)=>{
-//         //     return a.name > b.name ? 1 : -1;
-//         // });
-//         for(let pokemon of pokemonList){
-//             // let select = document.querySelector("select");
+            select.append(newOption);
+        }
+    }).catch((err)=>{
+        console.log(err);
+    });
 
-//             // let newOption = document.createElement("option");
-//             // newOption.textContent = pokemon.name[0].toUpperCase() + pokemon.name.slice(1);
-//             // newOption.value = pokemon.name;
+    let form = document.querySelector("form#pokemon-selector");
 
-//             // select.append(newOption);
+    form.addEventListener("submit", (e)=>{
+        e.preventDefault();
+        let details = document.querySelector("#details");
+        let url = "https://assets.pokemon.com/assets/cms2/img/pokedex/full/007.png";
+        details.innerHTML = `<div id="details-title">
+                <h2>Details</h2>
+            </div>
+            <div id="details-img-container">
+                <img src=${url} alt="Image of selected pokémon" />
+            </div>
+            <div id="details-text">
+                <div id="details-name">Name: Squirtle</div>
+                <div id="details-species">Species: Pikachu</div>
+                <div id="details-type">Type: Electric</div>
+            </div>
+            <div id="details-sub-text">
+                <h3>Base Attributes</h3>
+                <div>Hit Points: 35</div>
+                <div>Attack: 55</div>
+                <div>Defense: 40</div>
+            </div>
+            <div id="details-action">
+                <button>Add -></button>
+            </div>`;
 
-//             /////////////////// Option
-//             let newOption = document.createElement("option");
-//             newOption.textContent = pokemon.name[0].toUpperCase() + pokemon.name.slice(1);
-//             newOption.value = pokemon.name;
-//             /////////////////// Option
 
-//             let select = document.querySelector("select");
-//             select.append(newOption);
-//         }
-//     }).catch((err)=>{
-//         console.log(err);
-//     });
-
-//     // a[target="_blank"]
-
-//     let form = document.querySelector("form");
-
-//     form.addEventListener("submit", (e)=>{
-//         e.preventDefault();
 //         let selectedPokemon = e.target["pokemon-select"].value;
 
 //         // console.log("https://pokeapi.co/api/v2/pokemon/" + selectedPokemon)
@@ -57,4 +68,4 @@
 //         }
 
 //         // console.log(selectedPokemon);
-//     });
+    });
