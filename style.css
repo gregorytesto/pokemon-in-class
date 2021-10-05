@@ -71,6 +71,21 @@
     grid-area: team;
 }
 
+ul#team-list{
+    list-style-type: none;
+    padding:0;
+}
+ul#team-list li{
+    margin: 5px;
+    border: 1px solid black;
+    display: flex;
+    align-items: center;
+}
+ul#team-list img{
+    border-radius: 50%;
+    width:50px;
+}
+
 #evolution{
     grid-area: evolution;
 }
