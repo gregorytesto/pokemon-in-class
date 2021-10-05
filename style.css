@@ -9,7 +9,7 @@
     "header header header"
     "selector selector selector"
     "details details team"
-    "evolution evolution evolution"
+    "versions versions versions"
     "recent recent recent";
     grid-gap: 5px;
     max-width: 800px;
@@ -86,8 +86,26 @@ ul#team-list img{
     width:50px;
 }
 
-#evolution{
-    grid-area: evolution;
+#versions{
+    grid-area: versions;
+}
+
+#versions-list, #recent-list{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 5px;
+}
+
+#versions-list > *, #recent-list > *{
+    border: 1px solid black;
+}
+
+#versions-list img, #recent-list img{
+    width: 75px;
+}
+
+.versions-list-item, .recent-list-item{
+    text-align: center;
 }
 
 #recent{
