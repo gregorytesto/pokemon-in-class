@@ -51,13 +51,23 @@
     grid-area: details-title;
 }
 
+#details-img-container{
+    text-align: center;
+}
+
 #details-img-container img{
     grid-area: details-img;
-    width:100px;
+    width:150px;
 }
 
 #details-text{
     grid-area: details-text;
+}
+
+#details-text div {
+    padding: 5px;
+    border: 1px solid black;
+    margin: 5px;
 }
 
 #details-sub-text{
