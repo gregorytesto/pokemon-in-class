@@ -24,17 +24,22 @@
             <div>No Pokemon Selected</div>
         </div>
         <div id="team">
-            <div id="add-to-team">
+            <span id="add-to-team">
                 <button>Add To Team</button>
-            </div>
+            </span>
+            <span id="clear-team">
+                <button>Clear Team</button>
+            </span>
             <h3>Team</h3>
             <ul id="team-list">
                 <li id="team-list-placeholder">No pokémon currently in team</li>
             </ul>
-            <h4>Team Statistics</h4>
-            <div>Health Points: 105</div>
-            <div>Attack: 130</div>
-            <div>Defense: 60</div>
+            <div id="team-stats">
+                <h4>Team Statistics</h4>
+                <div>Health Points: <span id="team-stats-hp">0</span></div>
+                <div>Attack: <span id="team-stats-atk">0</span></div>
+                <div>Defense: <span id="team-stats-def">0</span></div>    
+            </div>
         </div>
         <!-- <div id="versions">
             <h3>Versions</h3>

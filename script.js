@@ -41,9 +41,9 @@ function fetchPokemonDetails(pokemonName, shouldAddToRecent){
                     </div>
                     <div id="details-sub-text">
                         <h3>Base Attributes</h3>
-                        <div>Hit Points: ${hp}</div>
-                        <div>Attack: ${atk}</div>
-                        <div>Defense: ${def}</div>
+                        <div>Health Points: <span id="details-stats-hp">${hp}</span></div>
+                        <div>Attack: <span id="details-stats-atk">${atk}</span></div>
+                        <div>Defense: <span id="details-stats-def">${def}</span></div>
                     </div>`;
 
                     
@@ -119,8 +119,23 @@ fetch("https://pokeapi.co/api/v2/pokemon?limit=30")
 let addToTeamButton = document.querySelector("#add-to-team button");
 
 addToTeamButton.addEventListener("click", ()=>{
-    let currentPokemonName = document.querySelector("#details-name").textContent;
+    let currentPokemonEl = document.querySelector("#details-name");
     let currentPokemonImg = document.querySelector("#details-img-container img");
+
+    if(!currentPokemonEl || !currentPokemonImg){
+        return;
+    }
+
+    let team = document.querySelectorAll("#team-list li");
+
+    for(let member of team){
+        if(member.textContent === currentPokemonEl.textContent){
+            return;
+        }
+    }
+
+
+    let currentPokemonName = currentPokemonEl.textContent;
 
     let placeholder = document.querySelector("#team-list-placeholder");
     if(placeholder){
@@ -142,4 +157,33 @@ addToTeamButton.addEventListener("click", ()=>{
 
     ul.append(li);
 
+
+    let teamHp = document.querySelector("#team-stats-hp");
+    let teamAtk = document.querySelector("#team-stats-atk");
+    let teamDef = document.querySelector("#team-stats-def");
+
+    let detailsHp = document.querySelector("#details-stats-hp");
+    let detailsAtk = document.querySelector("#details-stats-atk");
+    let detailsDef = document.querySelector("#details-stats-def");
+
+    teamHp.textContent = Number(teamHp.textContent) + Number(detailsHp.textContent);
+    teamAtk.textContent = Number(teamAtk.textContent) + Number(detailsAtk.textContent);
+    teamDef.textContent = Number(teamDef.textContent) + Number(detailsDef.textContent);
+
 })
+
+let clearTeamButton = document.querySelector("#clear-team button");
+
+clearTeamButton.addEventListener("click", ()=>{
+    let teamHp = document.querySelector("#team-stats-hp");
+    let teamAtk = document.querySelector("#team-stats-atk");
+    let teamDef = document.querySelector("#team-stats-def");
+    teamHp.textContent = 0;
+    teamAtk.textContent = 0;
+    teamDef.textContent = 0;
+    let team = document.querySelectorAll("#team-list li");
+
+    for(let member of team){
+        member.remove();
+    }
+});
