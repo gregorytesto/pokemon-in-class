@@ -34,10 +34,10 @@ function fetchPokemonDetails(pokemonName, shouldAddToRecent){
                         <img src=${data.sprites.front_default} alt="Image of selected pokémon" />
                     </div>
                     <div id="details-text">
-                        <div id="details-name">Name: ${data.name}</div>
-                        <div id="details-type">Type: ${typeStr}</div>
-                        <div id="details-weight">Weight: ${data.weight} hectograms</div>
-                        <div id="details-height">Height: ${data.height} decimeters</div>
+                        <div>Name: <span id="details-name">${data.name}</span></div>
+                        <div>Type: <span id="details-type">${typeStr}</span></div>
+                        <div>Weight: <span id="details-weight">${data.weight}</span> hectograms</div>
+                        <div>Height: <span id="details-height">${data.height}</span> decimeters</div>
                     </div>
                     <div id="details-sub-text">
                         <h3>Base Attributes</h3>
@@ -116,10 +116,30 @@ fetch("https://pokeapi.co/api/v2/pokemon?limit=30")
 //         // console.log(selectedPokemon);
     });
 
-let addToTeamButton = document.querySelector("#add-to-team");
+let addToTeamButton = document.querySelector("#add-to-team button");
 
 addToTeamButton.addEventListener("click", ()=>{
     let currentPokemonName = document.querySelector("#details-name").textContent;
-    console.log(currentPokemonName);
-    // let currentPokemonImg;
+    let currentPokemonImg = document.querySelector("#details-img-container img");
+
+    let placeholder = document.querySelector("#team-list-placeholder");
+    if(placeholder){
+        placeholder.remove();
+    }
+
+    let li = document.createElement("li");
+    
+    let img = document.createElement("img");
+    img.alt = "Pokémon Team Thumbnail";
+    img.src = currentPokemonImg.src;
+
+    let span = document.createElement("span");
+    span.textContent = currentPokemonName;
+
+    li.append(img, span);
+
+    let ul = document.querySelector("#team-list");
+
+    ul.append(li);
+
 })
