@@ -1,3 +1,7 @@
+function capitalize(str){
+    return str[0].toUpperCase() + str.slice(1).toLowerCase();
+}
+
 function fetchPokemonDetails(pokemonName, shouldAddToRecent){
 
     let errMessage = document.querySelector("#error-message");
@@ -24,7 +28,7 @@ function fetchPokemonDetails(pokemonName, shouldAddToRecent){
                 let details = document.querySelector("#details");
 
                 let typeStr = data.types.map((typeEl)=>{
-                    return typeEl.type.name;
+                    return capitalize(typeEl.type.name);
                 }).join("/");
 
                 details.innerHTML = `<div id="details-title">
@@ -34,7 +38,7 @@ function fetchPokemonDetails(pokemonName, shouldAddToRecent){
                         <img src=${data.sprites.front_default} alt="Image of selected pokémon" />
                     </div>
                     <div id="details-text">
-                        <div>Name: <span id="details-name">${data.name}</span></div>
+                        <div>Name: <span id="details-name">${capitalize(data.name)}</span></div>
                         <div>Type: <span id="details-type">${typeStr}</span></div>
                         <div>Weight: <span id="details-weight">${data.weight}</span> hectograms</div>
                         <div>Height: <span id="details-height">${data.height}</span> decimeters</div>
@@ -61,7 +65,7 @@ function fetchPokemonDetails(pokemonName, shouldAddToRecent){
                         recentListImg.alt = "Evolution version image";
     
                         let nameDiv = document.createElement("div");
-                        nameDiv.textContent = data.name;
+                        nameDiv.textContent = capitalize(data.name);
     
                         nameDiv.addEventListener("click", (event)=>{
                             fetchPokemonDetails(event.target.textContent, false);
@@ -110,10 +114,16 @@ fetch("https://pokeapi.co/api/v2/pokemon?limit=30")
     form.addEventListener("submit", (e)=>{
         e.preventDefault();
         let selectedPokemon = e.target["pokemon-select"].value;
-//         // console.log("https://pokeapi.co/api/v2/pokemon/" + selectedPokemon)
-        fetchPokemonDetails(selectedPokemon, true);
 
-//         // console.log(selectedPokemon);
+        let recent = document.querySelectorAll(".recent-list-item");
+
+        for(let element of recent){
+            if(element.textContent.toLowerCase() === selectedPokemon.toLowerCase()){
+                return;
+            }
+        }
+
+        fetchPokemonDetails(selectedPokemon, true);
     });
 
 let addToTeamButton = document.querySelector("#add-to-team button");
@@ -129,7 +139,7 @@ addToTeamButton.addEventListener("click", ()=>{
     let team = document.querySelectorAll("#team-list li");
 
     for(let member of team){
-        if(member.textContent === currentPokemonEl.textContent){
+        if(member.textContent.toLowerCase() === currentPokemonEl.textContent.toLowerCase()){
             return;
         }
     }
