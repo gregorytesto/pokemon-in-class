@@ -6,7 +6,7 @@ function fetchPokemonDetails(pokemonName, shouldAddToRecent){
         fetch("https://pokeapi.co/api/v2/pokemon/" + pokemonName)
             .then((res)=>res.json())
             .then((data)=>{
-                console.log(data);
+
                 let hp;
                 let atk;
                 let def;
@@ -36,8 +36,8 @@ function fetchPokemonDetails(pokemonName, shouldAddToRecent){
                     <div id="details-text">
                         <div>Name: <span id="details-name">${data.name}</span></div>
                         <div>Type: <span id="details-type">${typeStr}</span></div>
-                        <div>Weight: <span id="details-weight">${data.weight}</span> hectograms</div>
-                        <div>Height: <span id="details-height">${data.height}</span> decimeters</div>
+                        <div>Weight: <span id="details-weight">${Math.round(Number(data.weight)/4.536)}</span> lbs</div>
+                        <div>Height: <span id="details-height">${Math.round(Number(data.height)/3.048)}</span> feet</div>
                     </div>
                     <div id="details-sub-text">
                         <h3>Base Attributes</h3>
@@ -48,23 +48,31 @@ function fetchPokemonDetails(pokemonName, shouldAddToRecent){
 
                     
                     if(shouldAddToRecent){
+                        // Check if pokèmon already exists
+                        let pokemonInList = document.querySelectorAll("#recent-list div");
+                        for(let pokemon of pokemonInList){
+                            if(pokemon.textContent === data.name){
+                                return;
+                            };
+                        }
+
                         let recentList = document.querySelector("#recent-list");
-                        // <div class="recent-list-item">
-                        //     <img src="https://static.pokemonpets.com/images/monsters-images-800-800/147-Dratini.webp" alt="Evolution version image" />
-                        //     <div>Dratini</div>
-                        // </div>
                         let recentListItem = document.createElement("div");
                         recentListItem.classList.add("recent-list-item");
     
                         let recentListImg = document.createElement("img");
                         recentListImg.src = data.sprites.front_default;
                         recentListImg.alt = "Evolution version image";
-    
+
                         let nameDiv = document.createElement("div");
                         nameDiv.textContent = data.name;
-    
-                        nameDiv.addEventListener("click", (event)=>{
-                            fetchPokemonDetails(event.target.textContent, false);
+
+                        recentListItem.addEventListener("click", function(event){
+                            let pokemonName = event.target.textContent;
+                            if(!event.target.textContent){
+                                pokemonName = event.target.parentElement.textContent;
+                            }
+                            fetchPokemonDetails(pokemonName, false);
                         });
     
                         recentListItem.append(recentListImg, nameDiv);
@@ -72,12 +80,44 @@ function fetchPokemonDetails(pokemonName, shouldAddToRecent){
                         recentList.append(recentListItem);
                     }
 
-                // let currentPokemonEl = document.querySelector("#current-pokemon");
-
-                // let img = document.createElement("img");
-                // img.src = data.sprites["front_default"];
-                
-                // currentPokemonEl.append(img);
+                    fetch(data.species.url)
+                        .then((res)=>res.json())
+                        .then((speciesData)=>{
+                            fetch(speciesData.evolution_chain.url)
+                                .then((res)=>res.json())
+                                .then((evolutionData)=>{
+                                    let { chain } = evolutionData;
+                                    let versionList = document.querySelector("#versions-list");
+                                    while (versionList.firstChild) {
+                                        versionList.removeChild(versionList.firstChild);
+                                    }
+                                    function getEvo(evoChain){
+                                        fetch("https://pokeapi.co/api/v2/pokemon/" + evoChain.species.name)
+                                            .then(res=>res.json())
+                                            .then(data=>{
+                                                let div = document.createElement("div");
+                                                div.className = "versions-list-item";
+                                                if(pokemonName === evoChain.species.name){
+                                                    div.style.backgroundColor = "lightgray";
+                                                }        
+                                                div.innerHTML = (
+                                                    `<img src=${data.sprites.front_default} alt="Evolution version image" />
+                                                    <div>${evoChain.species.name}</div>`
+                                                );
+                                                versionList.append(div);
+                                                if(evoChain.evolves_to.length < 1){
+                                                    return;
+                                                }
+                                                for(let i=0;i<evoChain.evolves_to.length;i++){
+                                                    getEvo(evoChain.evolves_to[i]);
+                                                }
+                                            }).catch(err=>console.log(err));
+                                    }
+                                    getEvo(chain);
+                                })
+                                .catch(err=>console.log(err));
+                        })
+                        .catch(err=>console.log(err));
             });
     } else {
         errMessage.textContent = "Please choose a Pokemon!";
@@ -110,10 +150,7 @@ fetch("https://pokeapi.co/api/v2/pokemon?limit=30")
     form.addEventListener("submit", (e)=>{
         e.preventDefault();
         let selectedPokemon = e.target["pokemon-select"].value;
-//         // console.log("https://pokeapi.co/api/v2/pokemon/" + selectedPokemon)
         fetchPokemonDetails(selectedPokemon, true);
-
-//         // console.log(selectedPokemon);
     });
 
 let addToTeamButton = document.querySelector("#add-to-team button");
@@ -133,7 +170,6 @@ addToTeamButton.addEventListener("click", ()=>{
             return;
         }
     }
-
 
     let currentPokemonName = currentPokemonEl.textContent;
 
@@ -156,7 +192,6 @@ addToTeamButton.addEventListener("click", ()=>{
     let ul = document.querySelector("#team-list");
 
     ul.append(li);
-
 
     let teamHp = document.querySelector("#team-stats-hp");
     let teamAtk = document.querySelector("#team-stats-atk");

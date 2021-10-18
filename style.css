@@ -86,12 +86,14 @@ ul#team-list{
     list-style-type: none;
     padding:0;
 }
+
 ul#team-list li{
     margin: 5px;
     border: 1px solid black;
     display: flex;
     align-items: center;
 }
+
 ul#team-list img{
     border-radius: 50%;
     width:50px;
@@ -119,12 +121,11 @@ ul#team-list img{
     text-align: center;
 }
 
-.recent-list-item div{
+.recent-list-item{
+    padding:10px;
     cursor: pointer;
 }
-
 
 #recent{
     grid-area: recent;
 }
-
