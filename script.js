@@ -174,6 +174,7 @@ addToTeamButton.addEventListener("click", ()=>{
 
 let clearTeamButton = document.querySelector("#clear-team button");
 
+// An event listener that clears stats of team
 clearTeamButton.addEventListener("click", ()=>{
     let teamHp = document.querySelector("#team-stats-hp");
     let teamAtk = document.querySelector("#team-stats-atk");

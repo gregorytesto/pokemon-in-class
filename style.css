@@ -6,11 +6,11 @@
 #main{
     display: grid;
     grid-template-areas: 
-    "header header header"
-    "selector selector selector"
-    "details details team"
-    "versions versions versions"
-    "recent recent recent";
+        "header header header"
+        "selector selector selector"
+        "details details team"
+        "versions versions versions"
+        "recent recent recent";
     grid-gap: 5px;
     max-width: 800px;
     width: 75%;
@@ -40,11 +40,29 @@
     grid-area: details;
     display: grid;
     grid-template-areas: 
-    "details-title details-title"
-    "details-img details-text"
-    "details-sub-text details-sub-text"
-    ". details-action";
+        "details-title details-title"
+        "details-img details-text"
+        "details-sub-text details-sub-text";
     grid-gap: 5px;
+}
+
+@media only screen and (max-width: 768px) {
+    #main{
+        grid-template-areas: 
+            "header"
+            "selector"
+            "details"
+            "team"
+            "versions"
+            "recent";
+    }
+    #details{
+        grid-template-areas:
+            "details-title"
+            "details-img"
+            "details-text"
+            "details-sub-text";
+    }
 }
 
 #details-title{
