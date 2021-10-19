@@ -114,15 +114,19 @@ async function fetchPokemonDetails(pokemonName, shouldAddToRecent){
                 console.log(err);
             }
 
-            console.log(evolutionsData);
             let evolutionChain = [evolutionsData.chain.species.name];
             let chain = evolutionsData.chain;
             while(true){
                 if(chain.evolves_to.length < 1){
                     break;
+                } else if(chain.evolves_to.length > 1){
+                    for(let evoPokemon of chain.evolves_to){
+                        evolutionChain.push(evoPokemon.species.name);
+                    }
+                    break;
                 }
                 chain = chain.evolves_to[0];
-                evolutionChain.push(chain.species.name)
+                evolutionChain.push(chain.species.name);
             }
 
             let evolutionsList = document.querySelector("#evolutions-list");
@@ -140,7 +144,6 @@ async function fetchPokemonDetails(pokemonName, shouldAddToRecent){
                     `<img src=${evolvedPokemonData.sprites.front_default} alt="Evolution version image" />
                     <div>${evolvedPokemon}</div>`
                 )
-
                 evolutionsList.append(div);
             }
 
