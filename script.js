@@ -2,6 +2,47 @@ function capitalize(str){
     return str[0].toUpperCase() + str.slice(1).toLowerCase();
 }
 
+let allPokemonOptions=[];
+
+fetch("https://pokeapi.co/api/v2/pokemon?limit=2000")
+    .then((res)=>{
+        return res.json();
+    }).then((data)=>{
+        let pokemonList = data.results;
+        for(let pokemon of pokemonList){
+            let { name } = pokemon;
+            let select = document.querySelector("#pokemon-selector select");
+            
+            /////////////////// Option
+            let newOption = document.createElement("option");
+            newOption.textContent = name[0].toUpperCase() + name.slice(1);
+            newOption.value = name;
+            allPokemonOptions.push(newOption);
+            /////////////////// Option
+
+            select.append(newOption);
+        }
+    }).catch((err)=>{
+        console.log(err);
+    });
+
+    let form = document.querySelector("form#pokemon-selector");
+
+    form.addEventListener("submit", (e)=>{
+        e.preventDefault();
+        let selectedPokemon = e.target["pokemon-select"].value;
+
+        let recent = document.querySelectorAll(".recent-list-item");
+
+        for(let element of recent){
+            if(element.textContent.toLowerCase() === selectedPokemon.toLowerCase()){
+                return;
+            }
+        }
+
+        fetchPokemonDetails(selectedPokemon, true);
+    });
+
 async function fetchPokemonDetails(pokemonName, shouldAddToRecent){
 
     let errMessage = document.querySelector("#error-message");
@@ -57,12 +98,6 @@ async function fetchPokemonDetails(pokemonName, shouldAddToRecent){
 
 
             // Evolutions
-
-            // <div class="evolutions-list-item">
-            //         <img src="https://static.pokemonpets.com/images/monsters-images-800-800/26-Raichu.webp" alt="Evolution version image" />
-            //         <div>Raichu</div>
-            // </div>
-
             let speciesData;
             try{
                 let speciesRes = await fetch(pokemonData.species.url);
@@ -78,7 +113,36 @@ async function fetchPokemonDetails(pokemonName, shouldAddToRecent){
             } catch(err){
                 console.log(err);
             }
+
             console.log(evolutionsData);
+            let evolutionChain = [evolutionsData.chain.species.name];
+            let chain = evolutionsData.chain;
+            while(true){
+                if(chain.evolves_to.length < 1){
+                    break;
+                }
+                chain = chain.evolves_to[0];
+                evolutionChain.push(chain.species.name)
+            }
+
+            let evolutionsList = document.querySelector("#evolutions-list");
+            
+            while (evolutionsList.firstChild) {
+                evolutionsList.removeChild(evolutionsList.firstChild);
+            }
+
+            for(let evolvedPokemon of evolutionChain){
+                let div = document.createElement("div");
+                div.className = "evolutions-list-item";
+                let evolvedPokemonRes = await fetch("https://pokeapi.co/api/v2/pokemon/" + evolvedPokemon.toLowerCase());
+                let evolvedPokemonData =  await evolvedPokemonRes.json();
+                div.innerHTML = (
+                    `<img src=${evolvedPokemonData.sprites.front_default} alt="Evolution version image" />
+                    <div>${evolvedPokemon}</div>`
+                )
+
+                evolutionsList.append(div);
+            }
 
             // Evolutions
 
@@ -109,44 +173,6 @@ async function fetchPokemonDetails(pokemonName, shouldAddToRecent){
         errMessage.textContent = "Please choose a Pokemon!";
     }
 }
-
-fetch("https://pokeapi.co/api/v2/pokemon?limit=30")
-    .then((res)=>{
-        return res.json();
-    }).then((data)=>{
-        let pokemonList = data.results;
-        for(let pokemon of pokemonList){
-            let { name } = pokemon;
-            let select = document.querySelector("#pokemon-selector select");
-            
-            /////////////////// Option
-            let newOption = document.createElement("option");
-            newOption.textContent = name[0].toUpperCase() + name.slice(1);
-            newOption.value = name;
-            /////////////////// Option
-
-            select.append(newOption);
-        }
-    }).catch((err)=>{
-        console.log(err);
-    });
-
-    let form = document.querySelector("form#pokemon-selector");
-
-    form.addEventListener("submit", (e)=>{
-        e.preventDefault();
-        let selectedPokemon = e.target["pokemon-select"].value;
-
-        let recent = document.querySelectorAll(".recent-list-item");
-
-        for(let element of recent){
-            if(element.textContent.toLowerCase() === selectedPokemon.toLowerCase()){
-                return;
-            }
-        }
-
-        fetchPokemonDetails(selectedPokemon, true);
-    });
 
 let addToTeamButton = document.querySelector("#add-to-team button");
 
@@ -220,3 +246,22 @@ clearTeamButton.addEventListener("click", ()=>{
         member.remove();
     }
 });
+
+let filterSelect = document.querySelector("#filter-select");
+filterSelect.addEventListener("input", (e)=>{
+    let pokemonSelect = document.querySelector("#pokemon-select");
+    let filteredArr = [];
+    for(let option of allPokemonOptions){
+        if(option.value.includes(e.target.value)){
+            filteredArr.push(option);
+        }
+    }
+
+    while (pokemonSelect.firstChild) {
+            pokemonSelect.removeChild(pokemonSelect.firstChild);
+    }
+
+    for(let option of filteredArr){
+        pokemonSelect.append(option);
+    }
+})
