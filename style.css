@@ -9,7 +9,7 @@
         "header header header"
         "selector selector selector"
         "details details team"
-        "versions versions versions"
+        "evolutions evolutions evolutions"
         "recent recent recent";
     grid-gap: 5px;
     max-width: 800px;
@@ -53,7 +53,7 @@
             "selector"
             "details"
             "team"
-            "versions"
+            "evolutions"
             "recent";
     }
     #details{
@@ -115,25 +115,25 @@ ul#team-list img{
     width:50px;
 }
 
-#versions{
-    grid-area: versions;
+#evolutions{
+    grid-area: evolutions;
 }
 
-#versions-list, #recent-list{
+#evolutions-list, #recent-list{
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-gap: 5px;
 }
 
-#versions-list > *, #recent-list > *{
+#evolutions-list > *, #recent-list > *{
     border: 1px solid black;
 }
 
-#versions-list img, #recent-list img{
+#evolutions-list img, #recent-list img{
     width: 75px;
 }
 
-.versions-list-item, .recent-list-item{
+.evolutions-list-item, .recent-list-item{
     text-align: center;
 }
 

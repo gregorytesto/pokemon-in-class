@@ -8,10 +8,10 @@ async function fetchPokemonDetails(pokemonName, shouldAddToRecent){
     if( pokemonName !== "default" ){
         errMessage.textContent = "";
 
-        let data;
+        let pokemonData;
         try{
-            let res = await fetch("https://pokeapi.co/api/v2/pokemon/" + pokemonName.toLowerCase());
-            data = await res.json();    
+            let pokemonRes = await fetch("https://pokeapi.co/api/v2/pokemon/" + pokemonName.toLowerCase());
+            pokemonData = await pokemonRes.json();    
         }catch(err){
             console.log(err);
         }
@@ -20,7 +20,7 @@ async function fetchPokemonDetails(pokemonName, shouldAddToRecent){
         let atk;
         let def;
         
-        for(let statObj of data.stats){
+        for(let statObj of pokemonData.stats){
             if(statObj.stat.name === "hp"){
                 hp = statObj.base_stat;
             } else if(statObj.stat.name === "attack"){
@@ -32,7 +32,7 @@ async function fetchPokemonDetails(pokemonName, shouldAddToRecent){
 
         let details = document.querySelector("#details");
 
-        let typeStr = data.types.map((typeEl)=>{
+        let typeStr = pokemonData.types.map((typeEl)=>{
             return capitalize(typeEl.type.name);
         }).join("/");
 
@@ -40,13 +40,13 @@ async function fetchPokemonDetails(pokemonName, shouldAddToRecent){
                 <h2>Details</h2>
             </div>
             <div id="details-img-container">
-                <img src=${data.sprites.front_default} alt="Image of selected pokémon" />
+                <img src=${pokemonData.sprites.front_default} alt="Image of selected pokémon" />
             </div>
             <div id="details-text">
-                <div>Name: <span id="details-name">${capitalize(data.name)}</span></div>
+                <div>Name: <span id="details-name">${capitalize(pokemonData.name)}</span></div>
                 <div>Type: <span id="details-type">${typeStr}</span></div>
-                <div>Weight: <span id="details-weight">${Math.round(Number(data.weight)/4.536)}</span> lbs</div>
-                <div>Height: <span id="details-height">${Math.round(Number(data.height)/3.048)}</span> ft</div>
+                <div>Weight: <span id="details-weight">${Math.round(Number(pokemonData.weight)/4.536)}</span> lbs</div>
+                <div>Height: <span id="details-height">${Math.round(Number(pokemonData.height)/3.048)}</span> ft</div>
             </div>
             <div id="details-sub-text">
                 <h3>Base Attributes</h3>
@@ -54,6 +54,33 @@ async function fetchPokemonDetails(pokemonName, shouldAddToRecent){
                 <div>Attack: <span id="details-stats-atk">${atk}</span></div>
                 <div>Defense: <span id="details-stats-def">${def}</span></div>
             </div>`;
+
+
+            // Evolutions
+
+            // <div class="evolutions-list-item">
+            //         <img src="https://static.pokemonpets.com/images/monsters-images-800-800/26-Raichu.webp" alt="Evolution version image" />
+            //         <div>Raichu</div>
+            // </div>
+
+            let speciesData;
+            try{
+                let speciesRes = await fetch(pokemonData.species.url);
+                speciesData = await speciesRes.json();    
+            } catch(err){
+                console.log(err);
+            }
+
+            let evolutionsData;
+            try{
+                let evolutionsRes = await fetch(speciesData.evolution_chain.url);
+                evolutionsData = await evolutionsRes.json();    
+            } catch(err){
+                console.log(err);
+            }
+            console.log(evolutionsData);
+
+            // Evolutions
 
             
             if(shouldAddToRecent){
@@ -63,14 +90,13 @@ async function fetchPokemonDetails(pokemonName, shouldAddToRecent){
                 recentListItem.classList.add("recent-list-item");
 
                 let recentListImg = document.createElement("img");
-                recentListImg.src = data.sprites.front_default;
+                recentListImg.src = pokemonData.sprites.front_default;
                 recentListImg.alt = "Evolution version image";
 
                 let nameDiv = document.createElement("div");
-                nameDiv.textContent = capitalize(data.name);
+                nameDiv.textContent = capitalize(pokemonData.name);
 
                 nameDiv.addEventListener("click", (event)=>{
-                    console.log("Trigger");
                     fetchPokemonDetails(event.target.textContent, false);
                 });
 
