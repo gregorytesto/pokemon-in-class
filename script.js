@@ -1,6 +1,40 @@
 function capitalize(str){
     return str[0].toUpperCase() + str.slice(1).toLowerCase();
 }
+let title = document.querySelector("#header");
+
+"Poké Teams".split("").forEach((letter, index)=>{
+    let span = document.createElement("span");
+    span.textContent = letter;
+
+    span.style.transition = "1s";
+    // span.style.opacity = 0;
+    span.style.position = "relative";
+    span.style.display = "inline-block";
+    // span.style.top = 0;
+
+    title.append(span);
+
+    setTimeout(()=>{
+        // span.style.opacity = 1;
+        // span.style.top = "50px";
+
+        span.style.animation = "moveElement 1s infinite, spinElement 1s infinite, colorElement 2s infinite";
+
+    }, 100*index);
+
+});
+
+// h1.style.opacity = 0;
+// h1.style.transform = "rotate(0deg)";
+
+// h1.style.transition = "5s";
+
+// setTimeout(()=>{
+//     // h1.style.transform = "rotate(360deg)";
+//     // h1.style.opacity = 1;
+// }, 1000);
+
 
 let allPokemonOptions=[];
 
